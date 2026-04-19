@@ -44,7 +44,7 @@ const App = () => {
 
   return (
     <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
-      <h1>Task Tracker (Go + React) with Persistance volume</h1>
+      <h1>Task Tracker</h1>
 
       <form onSubmit={addTask} style={{ marginBottom: "20px" }}>
         <input
