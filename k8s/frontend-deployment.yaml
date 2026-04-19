@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: surajmane121045/sun_frontend_app:3d2f36570367bef596f79dd0fb991b0b10911983
+        image: surajmane121045/sun_frontend_app:eaf5fe4b1d647a23f69891f820567b943b248709
         ports:
         - containerPort: 80
 
