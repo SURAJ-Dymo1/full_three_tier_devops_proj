@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: surajmane121045/sun_frontend_app:3d2f36570367bef596f79dd0fb991b0b10911983
+        ports:
+        - containerPort: 80
+
+        env:
+        # ConfigMap values
+        - name: VITE_Backend_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: all-config
+              key: VITE_Backend_API_URL

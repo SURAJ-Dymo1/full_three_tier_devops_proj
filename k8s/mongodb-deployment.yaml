@@ -1,0 +1,81 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: mongodb
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: mongodb
+#   template:
+#     metadata:
+#       labels:
+#         app: mongodb
+#     spec:
+#       containers:
+#       - name: mongodb
+#         image: surajmane121045/sun_database_app:3d2f36570367bef596f79dd0fb991b0b10911983
+#         ports:
+#         - containerPort: 27017
+
+#         env:
+#         - name: MONGO_INITDB_ROOT_USERNAME
+#           value: "admin"
+#         - name: MONGO_INITDB_ROOT_PASSWORD
+#           value: "admin123"
+
+#         volumeMounts:
+#         - name: mongodb-storage
+#           mountPath: /data/db   # 👈 Mongo default data path
+
+#       volumes:
+#       - name: mongodb-storage
+#         persistentVolumeClaim:
+#           claimName: mongodb-pvc
+
+#### Mongo Statefulset------------------
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+spec:
+  serviceName: "mongo-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: surajmane121045/sun_database_app:3d2f36570367bef596f79dd0fb991b0b10911983
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: all-config
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: all-config
+                  key: MONGO_INITDB_ROOT_PASSWORD
+            - name: MONGO_INITDB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: all-config
+                  key: MONGO_INITDB_DATABASE
+          volumeMounts:
+            - name: mongodb-storage
+              mountPath: /data/db # 👈 Mongo default data path
+
+      volumes:
+        - name: mongodb-storage
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
